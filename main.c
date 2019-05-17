@@ -58,6 +58,7 @@ int main(int argc, char** argv)
     gets(password);
 
     printf("Minha Mensagem: %s\n", message);
+    printf("\n");
     printf("Minha Senha: %s\n", password);
 
     //%%%%%%%%%%%%%%%%%%%%%%%%%% Designar o intervalo %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -70,6 +71,7 @@ int main(int argc, char** argv)
         media=media+ascii;
         //printf("ASCII value of %c = %d\n", password[i], password[i]);
     }
+    printf("\n");
 
     int intervalo=media/strlen(password);
     printf("Intervalo = %d\n", intervalo);
@@ -88,7 +90,7 @@ int main(int argc, char** argv)
     {
         message[i] = message[i] + cifra;
     }
-
+    printf("\n");
     printf("Mensagem COD: %s\n", message);
 
     //decodificaMensagem(message,cifra);
@@ -135,11 +137,14 @@ int main(int argc, char** argv)
 
     }
     SOIL_save_image("saida.bmp", SOIL_SAVE_TYPE_BMP, pic.width, pic.height, 3, pic.img);
+    printf("\n");
     free(pic.img);
 
 
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% AGORA DECRIPTADOR %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    printf("=============================================================\n");
     load("saida.bmp", &pic);
+
 
     // Interacao
     char password2[100];
@@ -148,6 +153,7 @@ int main(int argc, char** argv)
     gets(password2);
 
     printf("Senha digitada: %s\n", password2);
+    printf("\n");
 
     //%%%%%%%%%%%%%%%%%%%%%%%%%% Designar o intervalo %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     int media2=0;
@@ -159,6 +165,7 @@ int main(int argc, char** argv)
         media2=media2+ascii2;
         //printf("ASCII value of %c = %d\n", password[i], password[i]);
     }
+    printf("\n");
     int intervalo2=media2/strlen(password2);
     printf("Intervalo = %d\n", intervalo2);
 
@@ -169,12 +176,12 @@ int main(int argc, char** argv)
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%% Designar quantas casas a cifra irá avançar %%%%%%%%%%%%%%%%
     int cifra2 = password2[0] - 'z' - 10;
     printf("Cifra = %d\n", cifra2);
-
+    printf("\n");
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%% Pegar na imagem a mensagem cifrada e "printar" %%%%%%%%%%%%%%%%
 
     unsigned int pix1,pix21;
     unsigned int valorR, valorRpos,valorOr,valorG;
-    printf("\nMensagem Final\n");
+    printf("\nMensagem descriptografada\n");
     for(int i=start2; i<pic.height*pic.width ; i=i+intervalo2)
     {
         //passar para unsigned int
@@ -204,6 +211,7 @@ int main(int argc, char** argv)
 
         }
     }
+    printf("\n=============================================================\n");
 }
 
 
