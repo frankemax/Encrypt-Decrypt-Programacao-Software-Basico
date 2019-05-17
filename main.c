@@ -136,20 +136,6 @@ int main(int argc, char** argv)
     //decodificaMensagem(message,cifra);
     //printf("Mensagem DECOD: %s\n", message);
 
-
-     //%%%%%%%%%%%%%%%%%%%%%%%%%%%% Tranformar para binario a mensagem cifrada%%%%%%%%%%%%%%%%
-    int len=strlen(message);
-    len= len*8;
-    int test[100]= {};
-    int i=0;
-
-    while(message[i]!='\0')
-    {
-        test[i]=message[i];
-        i++;
-    }
-
-
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%% alterar na imagem com os bits %%%%%%%%%%%%%%%%
 
     printf("\nIMG antes\n");
