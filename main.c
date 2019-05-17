@@ -5,68 +5,6 @@
 // SOIL é a biblioteca para leitura das imagens
 #include "SOIL.h"
 //https://www.thecrazyprogrammer.com/2016/11/caesar-cipher-c-c-encryption-decryption.html
-void codificaMensagem(char message[], int cifra)
-{
-    char ch;
-    int i;
-
-    for(i = 0; message[i] != '\0'; ++i)
-    {
-        ch = message[i];
-        if(ch >= 'a' && ch <= 'z')
-        {
-            ch = ch + cifra;
-            if(ch > 'z')
-            {
-                ch = ch - 'z' + 'a' - 1;
-            }
-            message[i] = ch;
-        }
-        else if(ch >= 'A' && ch <= 'Z')
-        {
-            ch = ch + cifra;
-            if(ch > 'Z')
-            {
-                ch = ch - 'Z' + 'A' - 1;
-            }
-            message[i] = ch;
-        }
-    }
-}
-//https://www.thecrazyprogrammer.com/2016/11/caesar-cipher-c-c-encryption-decryption.html
-void decodificaMensagem(char message[], int cifra)
-{
-    char ch;
-    int i;
-    for(i = 0; message[i] != '\0'; ++i)
-    {
-        ch = message[i];
-
-        if(ch >= 'a' && ch <= 'z')
-        {
-            ch = ch - cifra;
-
-            if(ch < 'a')
-            {
-                ch = ch + 'z' - 'a' + 1;
-            }
-
-            message[i] = ch;
-        }
-        else if(ch >= 'A' && ch <= 'Z')
-        {
-            ch = ch - cifra;
-
-            if(ch < 'A')
-            {
-                ch = ch + 'Z' - 'A' + 1;
-            }
-
-            message[i] = ch;
-        }
-    }
-}
-
 
 // Um pixel RGB
 typedef struct
@@ -142,11 +80,21 @@ int main(int argc, char** argv)
     int start= password[0];
     printf("Start = %d\n", start);
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%% Designar quantas casas a cifra irá avançar %%%%%%%%%%%%%%%%
-    int cifra= 10;
+
+    int cifra = password[0] - 'z' - 10;
     printf("Cifra = %d\n", cifra);
 
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%% Cifrar a mensagem- codifica-la%%%%%%%%%%%%%%%%
-    codificaMensagem(message,cifra);
+    //codificaMensagem(message,cifra);
+
+    for (int i =0; i< strlen(message); i++) //para codificar
+    {
+        message[i] = message[i] + cifra;
+        printf("mensagem = %d\n",message[i]);
+    }
+
+
+
     printf("Mensagem COD: %s\n", message);
 
     //decodificaMensagem(message,cifra);
@@ -195,7 +143,7 @@ int main(int argc, char** argv)
         }
 
     }
-    SOIL_save_image("saidas.jpg", SOIL_SAVE_TYPE_BMP, pic.width, pic.height, 3, pic.img);
+    SOIL_save_image("saida.bmp", SOIL_SAVE_TYPE_BMP, pic.width, pic.height, 3, pic.img);
     free(pic.img);
 
 
@@ -224,19 +172,17 @@ int main(int argc, char** argv)
     printf("Intervalo = %d\n", intervalo2);
 
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%% Designar o inicio %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    int start2= password[0];
+    int start2= password2[0];
     printf("Start = %d\n", start2);
 
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%% Designar quantas casas a cifra irá avançar %%%%%%%%%%%%%%%%
-    int cifra2= 10;
+    int cifra2 = password2[0] - 'z' - 10;
     printf("Cifra = %d\n", cifra2);
 
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%% Pegar na imagem a mensagem cifrada %%%%%%%%%%%%%%%%
 
     unsigned int pix1,pix21, pospix1;
     unsigned int valorr, valorg, valorrpos, valorgpos,valorOr;
-    char message1[100];
-    int posMessage=0;
     printf("\nMensagem Final\n");
     for(int i=start2; i<pic.height*pic.width ; i=i+intervalo2)
     {
@@ -261,12 +207,12 @@ int main(int argc, char** argv)
             {
                 break;
             }
+            //printf("valorCifra2 %d\n",cifra2);
+            //printf("valorOr2 %d\n",valorOr);
 
 
 
-            printf("%c",valorOr);
-            message1[posMessage]=0;
-            message1[posMessage]=valorOr;
+            printf("%c",valorOr - cifra2);
 
             //printf("[%d %d %d] ", pic.img[i].r, pic.img[i].g, pic.img[i].b);
 
