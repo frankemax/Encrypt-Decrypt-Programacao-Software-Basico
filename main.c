@@ -90,7 +90,7 @@ int main(int argc, char** argv)
     for (int i =0; i< strlen(message); i++) //para codificar
     {
         message[i] = message[i] + cifra;
-        printf("mensagem = %d\n",message[i]);
+        //printf("mensagem = %d\n",message[i]);
     }
 
 
