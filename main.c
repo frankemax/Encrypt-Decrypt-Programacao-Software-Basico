@@ -157,14 +157,10 @@ int main(int argc, char** argv)
     printf("\nIMG antes\n");
     for(int i=start; i<pic.height*pic.width ; i=i+intervalo)
     {
-
-
         if(i<=start+intervalo*strlen(message))
         {
-
             printf("[%d %d %0d] ", pic.img[i].r, pic.img[i].g, pic.img[i].b);
         }
-
     }
 
     unsigned int pix,pix2, pospix, pospix2, put, auxiliar;
@@ -199,6 +195,101 @@ int main(int argc, char** argv)
         }
 
     }
-
+    SOIL_save_image("saidas.jpg", SOIL_SAVE_TYPE_BMP, pic.width, pic.height, 3, pic.img);
     free(pic.img);
+
+
+    //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% AGORA DECRIPTADOR %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    load("saida.bmp", &pic);
+
+    // Interacao
+    char password2[100];
+
+    printf("Digite a senha:\n ");
+    scanf("%s", password2);
+
+    printf("Senha digitada: %s\n", password2);
+
+    //%%%%%%%%%%%%%%%%%%%%%%%%%% Designar o intervalo %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    int media2=0;
+    int ascii2=0;
+    for (int i =0; i< strlen(password2); i++)
+    {
+        ascii2=password2[i];
+        //printf("valor do ascii: %d\n",ascii);
+        media2=media2+ascii2;
+        //printf("ASCII value of %c = %d\n", password[i], password[i]);
+    }
+    int intervalo2=media2/strlen(password2);
+    printf("Intervalo = %d\n", intervalo2);
+
+    //%%%%%%%%%%%%%%%%%%%%%%%%%%%% Designar o inicio %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    int start2= password[0];
+    printf("Start = %d\n", start2);
+
+    //%%%%%%%%%%%%%%%%%%%%%%%%%%%% Designar quantas casas a cifra irá avançar %%%%%%%%%%%%%%%%
+    int cifra2= 10;
+    printf("Cifra = %d\n", cifra2);
+
+    //%%%%%%%%%%%%%%%%%%%%%%%%%%%% Pegar na imagem a mensagem cifrada %%%%%%%%%%%%%%%%
+
+    unsigned int pix1,pix21, pospix1;
+    unsigned int valorr, valorg, valorrpos, valorgpos,valorOr;
+    char message1[100];
+    int posMessage=0;
+    printf("\nMensagem Final\n");
+    for(int i=start2; i<pic.height*pic.width ; i=i+intervalo2)
+    {
+        pix1 = pic.img[i].r;
+        pix21 = pic.img[i].g;
+        pix1 = pix1 << 4;
+        pix21 = pix21 << 4;
+
+        if(i<start2+intervalo2*100)
+        {
+            valorr= pic.img[i].r;
+            valorr= valorr & 0X0F;
+            valorrpos=valorr << 4;
+            //printf("valor int do vetorr: %d \n",valorrpos);
+
+            valorg = pic.img[i].g;
+            valorg= valorg & 0X0F;
+            //printf("valor int do vetorg: %d\n",valorg);
+
+            valorOr = valorrpos | valorg;
+            if(valorOr<=0)
+            {
+                break;
+            }
+
+
+
+            printf("%c",valorOr);
+            message1[posMessage]=0;
+            message1[posMessage]=valorOr;
+
+            //printf("[%d %d %d] ", pic.img[i].r, pic.img[i].g, pic.img[i].b);
+
+
+        }
+    }
+    //printf("\nMensagem COD: %s\n", message1);
+    // printf("wtf: %d\n", message1[0]);
+    //decodificaMensagem(message1,10);
+    //printf("\nMensagem DECOD: %s\n", message1);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
