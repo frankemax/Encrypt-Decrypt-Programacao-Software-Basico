@@ -5,64 +5,78 @@
 // SOIL é a biblioteca para leitura das imagens
 #include "SOIL.h"
 //https://www.thecrazyprogrammer.com/2016/11/caesar-cipher-c-c-encryption-decryption.html
-void codificaMensagem(char message[], int cifra){
+void codificaMensagem(char message[], int cifra)
+{
     char ch;
-	int i;
+    int i;
 
-    for(i = 0; message[i] != '\0'; ++i){
-		ch = message[i];
-		if(ch >= 'a' && ch <= 'z'){
-			ch = ch + cifra;
-			if(ch > 'z'){
-				ch = ch - 'z' + 'a' - 1;
-			}
-			message[i] = ch;
-		}
-		else if(ch >= 'A' && ch <= 'Z'){
-			ch = ch + cifra;
-			if(ch > 'Z'){
-				ch = ch - 'Z' + 'A' - 1;
-			}
-			message[i] = ch;
-		}
-	}
+    for(i = 0; message[i] != '\0'; ++i)
+    {
+        ch = message[i];
+        if(ch >= 'a' && ch <= 'z')
+        {
+            ch = ch + cifra;
+            if(ch > 'z')
+            {
+                ch = ch - 'z' + 'a' - 1;
+            }
+            message[i] = ch;
+        }
+        else if(ch >= 'A' && ch <= 'Z')
+        {
+            ch = ch + cifra;
+            if(ch > 'Z')
+            {
+                ch = ch - 'Z' + 'A' - 1;
+            }
+            message[i] = ch;
+        }
+    }
 }
 //https://www.thecrazyprogrammer.com/2016/11/caesar-cipher-c-c-encryption-decryption.html
-void decodificaMensagem(char message[], int cifra){
+void decodificaMensagem(char message[], int cifra)
+{
     char ch;
-	int i;
-    for(i = 0; message[i] != '\0'; ++i){
-		ch = message[i];
+    int i;
+    for(i = 0; message[i] != '\0'; ++i)
+    {
+        ch = message[i];
 
-		if(ch >= 'a' && ch <= 'z'){
-			ch = ch - cifra;
+        if(ch >= 'a' && ch <= 'z')
+        {
+            ch = ch - cifra;
 
-			if(ch < 'a'){
-				ch = ch + 'z' - 'a' + 1;
-			}
+            if(ch < 'a')
+            {
+                ch = ch + 'z' - 'a' + 1;
+            }
 
-			message[i] = ch;
-		}
-		else if(ch >= 'A' && ch <= 'Z'){
-			ch = ch - cifra;
+            message[i] = ch;
+        }
+        else if(ch >= 'A' && ch <= 'Z')
+        {
+            ch = ch - cifra;
 
-			if(ch < 'A'){
-				ch = ch + 'Z' - 'A' + 1;
-			}
+            if(ch < 'A')
+            {
+                ch = ch + 'Z' - 'A' + 1;
+            }
 
-			message[i] = ch;
-		}
-	}
+            message[i] = ch;
+        }
+    }
 }
 
 
 // Um pixel RGB
-typedef struct {
+typedef struct
+{
     unsigned char r, g, b;
 } RGB;
 
 // Uma imagem em RGB
-typedef struct {
+typedef struct
+{
     int width, height;
     RGB* img;
 } Img;
@@ -88,7 +102,8 @@ void load(char* name, Img* pic)
 int main(int argc, char** argv)
 {
     Img pic;
-    if(argc < 1) {
+    if(argc < 1)
+    {
         printf("loader [img]\n");
         exit(1);
     }
@@ -112,8 +127,9 @@ int main(int argc, char** argv)
     //%%%%%%%%%%%%%%%%%%%%%%%%%% Designar o intervalo %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     int media=0;
     int ascii=0;
-    for (int i =0; i< strlen(password);i++){
-            ascii=password[i];
+    for (int i =0; i< strlen(password); i++)
+    {
+        ascii=password[i];
         //printf("valor do ascii: %d\n",ascii);
         media=media+ascii;
         //printf("ASCII value of %c = %d\n", password[i], password[i]);
@@ -139,44 +155,49 @@ int main(int argc, char** argv)
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%% alterar na imagem com os bits %%%%%%%%%%%%%%%%
 
     printf("\nIMG antes\n");
-    for(int i=start; i<pic.height*pic.width ;i=i+intervalo){
-        if(i>=start){
-                if(i<start+intervalo*strlen(message)){
+    for(int i=start; i<pic.height*pic.width ; i=i+intervalo)
+    {
 
-                    printf("[%d %d %0d] ", pic.img[i].r, pic.img[i].g, pic.img[i].b);
-                }
+
+        if(i<=start+intervalo*strlen(message))
+        {
+
+            printf("[%d %d %0d] ", pic.img[i].r, pic.img[i].g, pic.img[i].b);
         }
+
     }
 
     unsigned int pix,pix2, pospix, pospix2, put, auxiliar;
     int z=0;
 
     printf("\n zerando os quatro ultimos e deixando certo\n");
-    for(int i=start; i<pic.height*pic.width ;i=i+intervalo){
-        if(i>=start){
-                if(i<start+intervalo*strlen(message)){
-                    pix=pic.img[i].r;
-                    pix2=pic.img[i].g;
-                    //zerei os ultimos 4 bits do red e blue
-                    pospix = pix & 0XF0;
-                    pospix2 = pix2 & 0XF0;
-                    //printf("pos pix = %d\n",pospix);
-                    pic.img[i].r=pospix;
-                    pic.img[i].g=pospix2;
+    for(int i=start; i<pic.height*pic.width ; i=i+intervalo)
+    {
+        if(i<=start+intervalo*strlen(message))
+        {
+            pix=pic.img[i].r;
+            pix2=pic.img[i].g;
+            //zerei os ultimos 4 bits do red e blue
+            pospix = pix & 0XF0;
+            pospix2 = pix2 & 0XF0;
+            //printf("pos pix = %d\n",pospix);
+            pic.img[i].r=pospix;
+            pic.img[i].g=pospix2;
 
-                    // colocar os ultimos 4 bits do red e blue
-                    auxiliar = message[z];
-                    pospix = (pic.img[i].r) | (message[z] >>4);
-                    pospix2 = (pic.img[i].g) | (auxiliar & 0X0F);
+            // colocar os ultimos 4 bits do red e blue
+            auxiliar = message[z];
+            pospix = (pic.img[i].r) | (message[z] >>4);
+            pospix2 = (pic.img[i].g) | (auxiliar & 0X0F);
 
-                    pic.img[i].r=pospix;
-                    pic.img[i].g=pospix2;
+            pic.img[i].r=pospix;
+            pic.img[i].g=pospix2;
 
-                    printf("[%d %d %0d] ", pic.img[i].r, pic.img[i].g, pic.img[i].b);
-                    //printf("entrou\n");
-                    z++;
-                }
+            printf("[%d %d %0d] ", pic.img[i].r, pic.img[i].g, pic.img[i].b);
+            //printf("entrou\n");
+            z++;
+
         }
+
     }
 
     free(pic.img);
