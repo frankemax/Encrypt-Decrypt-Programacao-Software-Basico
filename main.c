@@ -55,6 +55,7 @@ void decodificaMensagem(char message[], int cifra){
 	}
 }
 
+
 // Um pixel RGB
 typedef struct {
     unsigned char r, g, b;
@@ -139,101 +140,58 @@ int main(int argc, char** argv)
      //%%%%%%%%%%%%%%%%%%%%%%%%%%%% Tranformar para binario a mensagem cifrada%%%%%%%%%%%%%%%%
     int len=strlen(message);
     len= len*8;
+    int test[100]= {};
+    int i=0;
 
-    int bin[len];
-    for (int i = 0; i<len; i++){
-        bin[i] = 0;
-    }
-    int y=0;
-
-
-    for(int x=0; message[x]!='\0'; x++)
+    while(message[i]!='\0')
     {
-        int val = message[x];
-        while(val > 0){
-            if(val % 2 == 1)
-            {
-                bin[y] = 1;}
-            else{
-                bin[y] = 0;
-            }
-
-            val = val/2;
-            y++;
-
-        }
-
+        test[i]=message[i];
+        i++;
     }
-    printf("\n");
-    for(int j=0; j<len; j++){
-        printf("%d ",bin[j]);
-    }
+
 
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%% alterar na imagem com os bits %%%%%%%%%%%%%%%%
 
     printf("\nIMG antes\n");
-    for(int i=start; i<140000 ;i=i+intervalo){
+    for(int i=start; i<pic.height*pic.width ;i=i+intervalo){
         if(i>=start){
                 if(i<start+intervalo*strlen(message)){
-                    printf("[%02X %02X %02X] ", pic.img[i].r, pic.img[i].g, pic.img[i].b);
+
+                    printf("[%d %d %0d] ", pic.img[i].r, pic.img[i].g, pic.img[i].b);
                 }
         }
     }
 
-    printf("\nzerando o Red\n");
-    for(int i=start; i<140000 ;i=i+intervalo){
+    unsigned int pix,pix2, pospix, pospix2, put, auxiliar;
+    int z=0;
+
+    printf("\n zerando os quatro ultimos e deixando certo\n");
+    for(int i=start; i<pic.height*pic.width ;i=i+intervalo){
         if(i>=start){
                 if(i<start+intervalo*strlen(message)){
-                    pic.img[i].r=00;
-                    printf("[%02X %02X %02X] ", pic.img[i].r, pic.img[i].g, pic.img[i].b);
+                    pix=pic.img[i].r;
+                    pix2=pic.img[i].g;
+                    //zerei os ultimos 4 bits do red e blue
+                    pospix = pix & 0XF0;
+                    pospix2 = pix2 & 0XF0;
+                    //printf("pos pix = %d\n",pospix);
+                    pic.img[i].r=pospix;
+                    pic.img[i].g=pospix2;
+
+                    // colocar os ultimos 4 bits do red e blue
+                    auxiliar = message[z];
+                    pospix = (pic.img[i].r) | (message[z] >>4);
+                    pospix2 = (pic.img[i].g) | (auxiliar & 0X0F);
+
+                    pic.img[i].r=pospix;
+                    pic.img[i].g=pospix2;
+
+                    printf("[%d %d %0d] ", pic.img[i].r, pic.img[i].g, pic.img[i].b);
                     //printf("entrou\n");
+                    z++;
                 }
         }
     }
-
-    printf("\nalterando o RED\n");
-    int j =0;
-    for(int i=start; i<140000 ;i=i+intervalo){
-        if(i>=start){
-                if(i<start+intervalo*strlen(message)){
-                    pic.img[i].r=message[j];
-                    printf("[%02X %02X %02X] ", pic.img[i].r, pic.img[i].g, pic.img[i].b);
-                    //printf("entrou\n");
-                }
-        }
-        j=j+1;
-    }
-
-
-    // Convert text to hex.
-    for (int i = 0, j = 0; i < strlen(message); ++i, j += 2)
-
-        sprintf(hex + j, "%02x", message[i] & 0xff);
-
-    printf("'%s' in hex is %s.\n", message, hex);
-
-
-
-    printf("IMG depois\n");
-    for(int i=start; i<140000 ;i=i+intervalo){
-        if(i>=start){
-                if(i<start+intervalo*strlen(message)){
-                    printf("[%02X %02X %02X] ", pic.img[i].r, pic.img[i].g, pic.img[i].b);
-                }
-        }
-    }
-
-
-
-
-    printf("\nPrimeiros 10 pixels da imagem alterada:\n");
-    for(int i=0; i<10; i++) {
-        printf("[%02X %02X %02X] ", pic.img[i].r, pic.img[i].g, pic.img[i].b);
-
-    }
-
-    printf("\n");
-    
 
     free(pic.img);
 }
