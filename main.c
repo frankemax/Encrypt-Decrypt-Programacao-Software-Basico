@@ -33,7 +33,7 @@ void load(char* name, Img* pic)
         printf( "SOIL loading error: '%s'\n", SOIL_last_result() );
         exit(1);
     }
-    printf("Load: %d x %d x %d\n", pic->width, pic->height, chan);
+    printf("\nCarregou uma imagem de dimensoes: %d x %d x %d\n", pic->width, pic->height, chan);
 }
 
 int main(int argc, char** argv)
@@ -50,13 +50,12 @@ int main(int argc, char** argv)
     // Interacao
     char message[100];
     char password[100];
-    char hex[100];
 
-    printf("Digite a mensagem: \n");
-    scanf("%s", message);
+    printf("Digite a mensagem : \n");
+    gets(message);
 
-    printf("Digite uma senha:\n ");
-    scanf("%s", password);
+    printf("Digite uma senha( sem espaco em branco ): \n ");
+    gets(password);
 
     printf("Minha Mensagem: %s\n", message);
     printf("Minha Senha: %s\n", password);
@@ -70,50 +69,37 @@ int main(int argc, char** argv)
         //printf("valor do ascii: %d\n",ascii);
         media=media+ascii;
         //printf("ASCII value of %c = %d\n", password[i], password[i]);
-
     }
 
     int intervalo=media/strlen(password);
     printf("Intervalo = %d\n", intervalo);
-    //%%%%%%%%%%%%%%%%%%%%%%%%%%%% Designar o inicio %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+
+    //%%%%%%%%%%%%%%%%%%%%%%%%%%%% Designar o inicio %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     int start= password[0];
     printf("Start = %d\n", start);
-    //%%%%%%%%%%%%%%%%%%%%%%%%%%%% Designar quantas casas a cifra irá avançar %%%%%%%%%%%%%%%%
 
+    //%%%%%%%%%%%%%%%%%%%%%%%%%%%% Designar quantas casas a cifra irá avançar %%%%%%%%%%%%%%%%
     int cifra = password[0] - 'z' - 10;
     printf("Cifra = %d\n", cifra);
 
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%% Cifrar a mensagem- codifica-la%%%%%%%%%%%%%%%%
-
-
-    for (int i =0; i< strlen(message); i++) //para codificar
+    for (int i =0; i< strlen(message); i++)
     {
         message[i] = message[i] + cifra;
     }
-
-
 
     printf("Mensagem COD: %s\n", message);
 
     //decodificaMensagem(message,cifra);
     //printf("Mensagem DECOD: %s\n", message);
 
-    //%%%%%%%%%%%%%%%%%%%%%%%%%%%% alterar na imagem com os bits %%%%%%%%%%%%%%%%
-
-    printf("\nIMG antes\n");
-    for(int i=start; i<pic.height*pic.width ; i=i+intervalo)
-    {
-        if(i<=start+intervalo*strlen(message))
-        {
-            printf("[%d %d %0d] ", pic.img[i].r, pic.img[i].g, pic.img[i].b);
-        }
-    }
+    //%%%%%%%%%%%%%%%%%%%%%%%%%%%% ALTERAR NA IMAGEM COM OS BITS %%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     unsigned int pix,pix2, pospix, pospix2, auxiliar;
     int z=0;
 
-    printf("\n zerando os quatro ultimos e deixando certo\n");
+    //printf("\n zerando os quatro ultimos e deixando certo\n");
     for(int i=start; i<pic.height*pic.width ; i=i+intervalo)
     {
         if(i<=start+intervalo*strlen(message))
@@ -121,7 +107,7 @@ int main(int argc, char** argv)
             pix=pic.img[i].r;
             pix2=pic.img[i].g;
 
-            //zerar os ultimos 4 bits do red e blue
+            //zerar os ultimos 4 bits do red e blue fazendo um and com 1111 0000
             pospix = pix & 0XF0;
             pospix2 = pix2 & 0XF0;
 
@@ -130,15 +116,18 @@ int main(int argc, char** argv)
             pic.img[i].r=pospix;
             pic.img[i].g=pospix2;
 
-            // colocar os ultimos 4 bits do red e blue
+            // colocar os ultimos 4 bits do red e green:
+            //      red: shiftando os 4 bits para a direita, e fazendo um or com o que esta na imagem.r
+            //      green: fazendo um and com 0000 1111, zerando os 4 primeiros bits, e por fim, fazendo um or com o image.g
             auxiliar = message[z];
             pospix = (pic.img[i].r) | (message[z] >>4);
             pospix2 = (pic.img[i].g) | (auxiliar & 0X0F);
 
+            // por fim guardar na img
             pic.img[i].r=pospix;
             pic.img[i].g=pospix2;
 
-            printf("[%d %d %0d] ", pic.img[i].r, pic.img[i].g, pic.img[i].b);
+            //printf("[%d %d %0d] ", pic.img[i].r, pic.img[i].g, pic.img[i].b);
             //printf("entrou\n");
             z++;
 
@@ -156,7 +145,7 @@ int main(int argc, char** argv)
     char password2[100];
 
     printf("Digite a senha:\n ");
-    scanf("%s", password2);
+    gets(password2);
 
     printf("Senha digitada: %s\n", password2);
 
@@ -181,29 +170,33 @@ int main(int argc, char** argv)
     int cifra2 = password2[0] - 'z' - 10;
     printf("Cifra = %d\n", cifra2);
 
-    //%%%%%%%%%%%%%%%%%%%%%%%%%%%% Pegar na imagem a mensagem cifrada %%%%%%%%%%%%%%%%
+    //%%%%%%%%%%%%%%%%%%%%%%%%%%%% Pegar na imagem a mensagem cifrada e "printar" %%%%%%%%%%%%%%%%
 
-    unsigned int pix1,pix21, pospix1;
-    unsigned int valorr, valorg, valorrpos, valorgpos,valorOr;
+    unsigned int pix1,pix21;
+    unsigned int valorR, valorRpos,valorOr,valorG;
     printf("\nMensagem Final\n");
     for(int i=start2; i<pic.height*pic.width ; i=i+intervalo2)
     {
+        //passar para unsigned int
         pix1 = pic.img[i].r;
         pix21 = pic.img[i].g;
+
+        //zerar a segunda parte dos 8 bits, ficando XXXX 0000
         pix1 = pix1 << 4;
         pix21 = pix21 << 4;
 
-        if(i<start2+intervalo2*100)
+        if(i<start2+intervalo2*100)//100 pois é o limite da message
         {
-            valorr= pic.img[i].r;
-            valorr= valorr & 0X0F;
-            valorrpos=valorr << 4;
+            valorR= pic.img[i].r;
+            valorR= valorR & 0X0F; //and com o 0000 1111 para zerar a primeira metade
+            valorRpos=valorR << 4; // shift valorR para ficar XXXX 0000
 
-            valorg = pic.img[i].g;
-            valorg= valorg & 0X0F;
+            valorG = pic.img[i].g;
+            valorG= valorG & 0X0F;// and com 0000 1111, para zerar a primeira metade
 
-            valorOr = valorrpos | valorg;
-            if(valorOr<=0)
+            valorOr = valorRpos | valorG; // or entre os dois para juntar as metades e formar o char
+
+            if(valorOr<=0)// condicao de parada
             {
                 break;
             }
