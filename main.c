@@ -4,7 +4,6 @@
 
 // SOIL é a biblioteca para leitura das imagens
 #include "SOIL.h"
-//https://www.thecrazyprogrammer.com/2016/11/caesar-cipher-c-c-encryption-decryption.html
 
 // Um pixel RGB
 typedef struct
@@ -73,6 +72,7 @@ int main(int argc, char** argv)
         //printf("ASCII value of %c = %d\n", password[i], password[i]);
 
     }
+
     int intervalo=media/strlen(password);
     printf("Intervalo = %d\n", intervalo);
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%% Designar o inicio %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -85,12 +85,11 @@ int main(int argc, char** argv)
     printf("Cifra = %d\n", cifra);
 
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%% Cifrar a mensagem- codifica-la%%%%%%%%%%%%%%%%
-    //codificaMensagem(message,cifra);
+
 
     for (int i =0; i< strlen(message); i++) //para codificar
     {
         message[i] = message[i] + cifra;
-        //printf("mensagem = %d\n",message[i]);
     }
 
 
@@ -111,7 +110,7 @@ int main(int argc, char** argv)
         }
     }
 
-    unsigned int pix,pix2, pospix, pospix2, put, auxiliar;
+    unsigned int pix,pix2, pospix, pospix2, auxiliar;
     int z=0;
 
     printf("\n zerando os quatro ultimos e deixando certo\n");
@@ -121,10 +120,13 @@ int main(int argc, char** argv)
         {
             pix=pic.img[i].r;
             pix2=pic.img[i].g;
-            //zerei os ultimos 4 bits do red e blue
+
+            //zerar os ultimos 4 bits do red e blue
             pospix = pix & 0XF0;
             pospix2 = pix2 & 0XF0;
+
             //printf("pos pix = %d\n",pospix);
+            //guardar na imagem com os 4 ultimos bits zerados
             pic.img[i].r=pospix;
             pic.img[i].g=pospix2;
 
@@ -196,46 +198,20 @@ int main(int argc, char** argv)
             valorr= pic.img[i].r;
             valorr= valorr & 0X0F;
             valorrpos=valorr << 4;
-            //printf("valor int do vetorr: %d \n",valorrpos);
 
             valorg = pic.img[i].g;
             valorg= valorg & 0X0F;
-            //printf("valor int do vetorg: %d\n",valorg);
 
             valorOr = valorrpos | valorg;
             if(valorOr<=0)
             {
                 break;
             }
-            //printf("valorCifra2 %d\n",cifra2);
-            //printf("valorOr2 %d\n",valorOr);
-
-
-
             printf("%c",valorOr - cifra2);
-
-            //printf("[%d %d %d] ", pic.img[i].r, pic.img[i].g, pic.img[i].b);
-
 
         }
     }
-    //printf("\nMensagem COD: %s\n", message1);
-    // printf("wtf: %d\n", message1[0]);
-    //decodificaMensagem(message1,10);
-    //printf("\nMensagem DECOD: %s\n", message1);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
+
+
+
